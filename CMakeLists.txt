@@ -9,7 +9,8 @@ set(LIB_DIRS ${lib_dir}/lib)
 
 set(MAIN_ENTRY 1_shader)
 set(MAIN_ENTRY 2_texture)
-# set(MAIN_ENTRY 3_transform)
+set(MAIN_ENTRY 3_transform)
+set(MAIN_ENTRY 4_3d)
 set(main_file src/${MAIN_ENTRY}.cpp)
 
 file(GLOB heads src/heads/*.hpp src/heads/*.h)

@@ -9,6 +9,9 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+
 GLFWwindow *init(int width, int height) {
     const int _width = width;
     const int _height = height;
@@ -30,11 +33,43 @@ GLFWwindow *init(int width, int height) {
 
     glViewport(0, 0, _width, _height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     return window;
+}
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+float fov = 45.0f;
+float max_fov = 80.0f;
+float min_fov = 1.0f;
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+    if (fov >= min_fov && fov <= max_fov)
+        fov -= yoffset;
+    if (fov <= min_fov)
+        fov = min_fov;
+    if (fov >= max_fov)
+        fov = max_fov;
+}
+
+glm::mat4 lookAt(glm::vec3 cameraPos, glm::vec3 cameraDir, glm::vec3 up) {
+    glm::mat4 trans;
+    glm::vec3 zaxis = glm::normalize(cameraDir);
+    glm::vec3 xaxis = glm::normalize(glm::cross(up, zaxis));
+    glm::vec3 yaxis = glm::cross(zaxis, xaxis);
+    trans = glm::translate(trans, -cameraPos);
+    glm::mat4 dir = glm::mat4(xaxis.x, xaxis.y, xaxis.z, 0, //
+                              yaxis.x, yaxis.y, yaxis.z, 0, //
+                              zaxis.x, zaxis.y, zaxis.z, 0, //
+                              0, 0, 0, 1);
+    glm::mat4 lookat = dir * trans;
+    return lookat;
 }
 
 int main(int argc, char *argv[]) {
@@ -103,19 +138,41 @@ int main(int argc, char *argv[]) {
 
     glEnable(GL_DEPTH_TEST);
 
-    glm::mat4 view, projection;
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
-    projection = glm::perspective(glm::radians(50.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+    float deltaTime = 0.0f; // 当前帧与上一帧的时间差
+    float lastFrame = 0.0f; // 上一帧的时间
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     while (!glfwWindowShouldClose(window)) {
 
         processInput(window);
+
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            cameraPos += cameraSpeed * cameraFront;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            cameraPos -= cameraSpeed * cameraFront;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        cameraPos.y = 0.0;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.use();
 
         float time = (float)glfwGetTime();
 
         glBindVertexArray(vao);
+        glm::mat4 view, projection;
+        // view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        view = lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        projection =
+            glm::perspective(glm::radians(fov), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
         for (unsigned int i = 0; i < 10; i++) {
             glm::mat4 model;
@@ -132,4 +189,40 @@ int main(int argc, char *argv[]) {
 
     glfwTerminate();
     return 0;
+}
+
+float lastX = WIDTH / 2, lastY = HEIGHT / 2;
+float pitch, yaw;
+bool firstMouse = true;
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.05;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
 }

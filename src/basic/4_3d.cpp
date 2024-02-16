@@ -1,6 +1,6 @@
 
-#include "heads/head.hpp"
-#include "heads/shader.hpp"
+#include "head.hpp"
+#include "shader.hpp"
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <glad/glad.h>
@@ -58,16 +58,17 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
         fov = max_fov;
 }
 
-glm::mat4 lookAt(glm::vec3 cameraPos, glm::vec3 cameraDir, glm::vec3 up) {
+glm::mat4 lookAt(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp) {
     glm::mat4 trans;
-    glm::vec3 zaxis = glm::normalize(cameraDir);
-    glm::vec3 xaxis = glm::normalize(glm::cross(up, zaxis));
+    glm::vec3 zaxis = glm::normalize(position - target);
+    glm::vec3 xaxis = glm::normalize(glm::cross(glm::normalize(worldUp), zaxis));
     glm::vec3 yaxis = glm::cross(zaxis, xaxis);
-    trans = glm::translate(trans, -cameraPos);
+    trans = glm::translate(trans, -position);
     glm::mat4 dir = glm::mat4(xaxis.x, xaxis.y, xaxis.z, 0, //
                               yaxis.x, yaxis.y, yaxis.z, 0, //
                               zaxis.x, zaxis.y, zaxis.z, 0, //
                               0, 0, 0, 1);
+    dir = glm::transpose(dir);
     glm::mat4 lookat = dir * trans;
     return lookat;
 }

@@ -1,5 +1,5 @@
-#include "heads/head.hpp"
-#include "heads/shader.hpp"
+#include "head.hpp"
+#include "shader.hpp"
 #include <cmath>
 #include <iostream>
 

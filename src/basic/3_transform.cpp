@@ -1,6 +1,5 @@
-
-#include "heads/head.hpp"
-#include "heads/shader.hpp"
+#include "head.hpp"
+#include "shader.hpp"
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <glad/glad.h>
@@ -36,11 +35,11 @@ GLFWwindow *init(int width, int height) {
 
 int main(int argc, char *argv[]) {
 
-    std::cout << "Learn OpenGL! --- 2: Texture"
+    std::cout << "Learn OpenGL! --- 3: transform"
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    Shader shader("../shaders/2_texture/vShader.glsl", "../shaders/2_texture/fShader.glsl");
+    Shader shader("../shaders/3_transform/vShader.glsl", "../shaders/3_transform/fShader.glsl");
 
     unsigned int texture1 = loadTexture("../texture/wall.jpg");
     stbi_set_flip_vertically_on_load(true);
@@ -111,7 +110,21 @@ int main(int argc, char *argv[]) {
 
         shader.setFloat("mix_rate", mixRate);
 
+        glm::mat4 trans;
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "transform"), 1, GL_FALSE,
+                           glm::value_ptr(trans));
+
         glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glm::mat4 trans2;
+        trans2 = glm::translate(trans2, glm::vec3(-0.5f, 0.5f, 0.0f));
+        float time = sin((float)glfwGetTime());
+        trans2 = glm::scale(trans2, glm::vec3(time, time, time));
+        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "transform"), 1, GL_FALSE,
+                           glm::value_ptr(trans2));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);

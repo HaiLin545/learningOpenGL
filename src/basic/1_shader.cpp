@@ -37,10 +37,14 @@ int main(int argc, char *argv[]) {
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    Shader shader("../shaders/1_shader/vertexShader.glsl",
-                  "../shaders/1_shader/fragmentShader.glsl");
-    Shader shader2("../shaders/1_shader/vertexShader.glsl", "../shaders/1_shader/fShader2.glsl");
-    Shader shader3("../shaders/1_shader/vShader2.glsl", "../shaders/1_shader/fShader3.glsl");
+    std::string shaderPath = "../shaders/basic/1_shader/";
+    Shader shader((shaderPath + "vertexShader.glsl").c_str(),
+                  (shaderPath + "fragmentShader.glsl").c_str());
+
+    Shader shader2((shaderPath + "vertexShader.glsl").c_str(),
+                   (shaderPath + "fShader2.glsl").c_str());
+    Shader shader3((shaderPath + "vShader2.glsl").c_str(), (shaderPath + "fShader3.glsl").c_str());
+
     float vertices1[] = {
         0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
     };

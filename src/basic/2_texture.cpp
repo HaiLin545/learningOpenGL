@@ -40,7 +40,12 @@ int main(int argc, char *argv[]) {
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    Shader shader("../shaders/2_texture/vShader.glsl", "../shaders/2_texture/fShader.glsl");
+    std::string shaderPath = "../shaders/basic/2_texture/";
+    std::string vShader = "vShader.glsl";
+    std::string fShader = "fShader.glsl";
+    std::string vsPath = shaderPath + vShader;
+    std::string fsPath = shaderPath + fShader;
+    Shader shader(vsPath.c_str(), fsPath.c_str());
 
     unsigned int texture1 = loadTexture("../texture/wall.jpg");
     stbi_set_flip_vertically_on_load(true);

@@ -39,16 +39,17 @@ int main(int argc, char *argv[]) {
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    std::string shaderPath = "../shaders/basic/3_transform/";
+    std::string shaderPath = std::string(MY_ROOT) + "shaders/basic/3_transform/";
+    std::string texturePath = std::string(MY_ROOT) + "texture/";
     std::string vShader = "vShader.glsl";
     std::string fShader = "fShader.glsl";
     std::string vsPath = shaderPath + vShader;
     std::string fsPath = shaderPath + fShader;
     Shader shader(vsPath.c_str(), fsPath.c_str());
 
-    unsigned int texture1 = loadTexture("../texture/wall.jpg");
+    unsigned int texture1 = loadTexture((texturePath + "wall.jpg").c_str());
     stbi_set_flip_vertically_on_load(true);
-    unsigned int texture2 = loadTexture("../texture/awesomeface.png", GL_RGBA);
+    unsigned int texture2 = loadTexture((texturePath + "awesomeface.png").c_str(), GL_RGBA);
 
     float vertices[] = {
         //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -

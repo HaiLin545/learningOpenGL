@@ -18,7 +18,7 @@ GLFWwindow *init(int width, int height) {
     }
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
     }
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    std::string shaderPath = "../shaders/basic/1_shader/";
+    std::string shaderPath = std::string(MY_ROOT) + "/shaders/basic/1_shader/";
     Shader shader((shaderPath + "vertexShader.glsl").c_str(),
                   (shaderPath + "fragmentShader.glsl").c_str());
 
@@ -46,26 +46,26 @@ int main(int argc, char *argv[]) {
     Shader shader3((shaderPath + "vShader2.glsl").c_str(), (shaderPath + "fShader3.glsl").c_str());
 
     float vertices1[] = {
-        0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
     };
 
     float vertices2[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f,
     };
 
     float vertices3[] = {
-        0.5f,  0.5f,  0.0f, // 右上角
-        0.5f,  -0.5f, 0.0f, // 右下角
-        -0.5f, -0.5f, 0.0f, // 左下角
-        -0.5f, 0.5f,  0.0f  // 左上角
+            0.5f, 0.5f, 0.0f, // 右上角
+            0.5f, -0.5f, 0.0f, // 右下角
+            -0.5f, -0.5f, 0.0f, // 左下角
+            -0.5f, 0.5f, 0.0f  // 左上角
     };
     unsigned int indices[] = {
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
+            0, 1, 3, // 第一个三角形
+            1, 2, 3  // 第二个三角形
     };
 
-    float vertices4[] = {-1.0f, 0.5f, 0.0f, 1.0f,  0.0f,  0.0f, -0.5f, 0.0f, 0.0f,
-                         0.0f,  1.0f, 0.0f, -1.0f, -0.5f, 0.0f, 0.0f,  0.0f, 1.0f};
+    float vertices4[] = {-1.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -0.5f, 0.0f, 0.0f,
+                         0.0f, 1.0f, 0.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f};
 
     unsigned int vao1, vao2, vao3, vao4;
     unsigned int vbo1, vbo2, vbo3, vbo4;
@@ -83,14 +83,14 @@ int main(int argc, char *argv[]) {
     glBindVertexArray(vao1);
     glBindBuffer(GL_ARRAY_BUFFER, vbo1);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
     glBindVertexArray(vao2);
     glBindBuffer(GL_ARRAY_BUFFER, vbo2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
@@ -99,16 +99,16 @@ int main(int argc, char *argv[]) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
     glBindVertexArray(vao4);
     glBindBuffer(GL_ARRAY_BUFFER, vbo4);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices4), vertices4, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);

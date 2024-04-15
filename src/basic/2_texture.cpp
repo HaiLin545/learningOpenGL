@@ -21,7 +21,7 @@ GLFWwindow *init(int width, int height) {
     }
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
     }
 
@@ -40,33 +40,34 @@ int main(int argc, char *argv[]) {
               << "\n";
     GLFWwindow *window = init(1200, 800);
 
-    std::string shaderPath = "../shaders/basic/2_texture/";
+    std::string shaderPath = std::string(MY_ROOT) + "shaders/basic/2_texture/";
+    std::string texturePath = std::string(MY_ROOT) + "texture/";
     std::string vShader = "vShader.glsl";
     std::string fShader = "fShader.glsl";
     std::string vsPath = shaderPath + vShader;
     std::string fsPath = shaderPath + fShader;
     Shader shader(vsPath.c_str(), fsPath.c_str());
 
-    unsigned int texture1 = loadTexture("../texture/wall.jpg");
+    unsigned int texture1 = loadTexture((texturePath + "wall.jpg").c_str());
     stbi_set_flip_vertically_on_load(true);
-    unsigned int texture2 = loadTexture("../texture/awesomeface.png", GL_RGBA);
+    unsigned int texture2 = loadTexture((texturePath + "awesomeface.png").c_str(), GL_RGBA);
 
     float vertices[] = {
-        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // 右上
-        0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
-        -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
+            //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // 右上
+            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 右下
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
+            -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // 左上
     };
     float texCoords[] = {
-        0.0f, 0.0f, // 左下角
-        1.0f, 0.0f, // 右下角
-        0.5f, 1.0f  // 上中
+            0.0f, 0.0f, // 左下角
+            1.0f, 0.0f, // 右下角
+            0.5f, 1.0f  // 上中
     };
 
     unsigned int indices[] = {
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
+            0, 1, 3, // 第一个三角形
+            1, 2, 3  // 第二个三角形
     };
 
     unsigned int vao, vbo, ebo;
@@ -79,12 +80,12 @@ int main(int argc, char *argv[]) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
     glEnableVertexAttribArray(2);
     glBindVertexArray(0);
 

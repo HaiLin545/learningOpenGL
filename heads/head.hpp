@@ -78,7 +78,7 @@ unsigned int craeteVertexShader(char *source) {
     return vertexShader;
 }
 
-unsigned int loadTexture(char *texturePath, unsigned int IMG_TYPE = GL_RGB) {
+unsigned int loadTexture(const char *texturePath, unsigned int IMG_TYPE = GL_RGB) {
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);

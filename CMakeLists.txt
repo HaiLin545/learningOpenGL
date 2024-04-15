@@ -7,23 +7,12 @@ set(lib_dir D:/envs/openGL/GLFW)
 set(INCLUDE_DIRS ${lib_dir}/include)
 set(LIB_DIRS ${lib_dir}/lib)
 
-# main entry
-set(chapter basic)
-set(MAIN_ENTRY 1_shader)
-set(MAIN_ENTRY 2_texture)
-set(MAIN_ENTRY 3_transform)
-set(MAIN_ENTRY 4_3d)
+add_compile_definitions(MY_ROOT="D:/learn/graphics/learningOpenGL/")
 
-set(main_file src/${chapter}/${MAIN_ENTRY}.cpp)
+file(GLOB HEADS ./heads/*.hpp heads/*.h)
+file(GLOB DEPS ./deps/*.cpp deps/*.c deps/*.h)
 
-# code
-file(GLOB heads heads/*.hpp heads/*.h)
-file(GLOB libs libs/*.cpp libs/*.c libs/*.h)
-file(GLOB main ${main_file})
-
-include_directories(heads)
+include_directories(./heads)
 link_directories(${LIB_DIRS})
-add_executable(${PROJECT_NAME} ${main} ${heads} ${libs})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw3)
+add_subdirectory(./src/basic)

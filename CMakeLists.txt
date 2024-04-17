@@ -16,3 +16,4 @@ include_directories(./heads)
 link_directories(${LIB_DIRS})
 
 add_subdirectory(./src/basic)
+add_subdirectory(./src/Light)

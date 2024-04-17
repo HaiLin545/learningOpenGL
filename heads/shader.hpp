@@ -7,19 +7,26 @@
 
 class Shader {
 
-  public:
+public:
     // 程序ID
     unsigned int ID;
 
     // 构造器读取并构建着色器
     Shader(const char *vertexPath, const char *fragmentPath);
+
     // 使用/激活程序
     void use();
+
     // uniform工具函数
     void setBool(const std::string &name, bool value) const;
+
     void setInt(const std::string &name, int value) const;
+
     void setFloat(const std::string &name, float value) const;
+
     void setMat4(const std::string &name, glm::mat4 trans) const;
+
+    void setVec3(const std::string &name, float v1, float v2, float v3) const;
 };
 
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
@@ -50,19 +57,19 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     }
     const char *vShaderCode = vertexCode.c_str();
     const char *fShaderCode = fragmentCode.c_str();
-    unsigned int vs = craeteVertexShader((char *)vShaderCode);
-    unsigned int fs = createFragmentShader((char *)fShaderCode);
+    unsigned int vs = craeteVertexShader((char *) vShaderCode);
+    unsigned int fs = createFragmentShader((char *) fShaderCode);
     ID = createProgram(vs, fs);
 }
 
 void Shader::use() { glUseProgram(ID); }
 
 void Shader::setBool(const std::string &name, bool value) const {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
 }
 
 void Shader::setInt(const std::string &name, int value) const {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
 }
 
 void Shader::setFloat(const std::string &name, float value) const {
@@ -70,5 +77,9 @@ void Shader::setFloat(const std::string &name, float value) const {
 }
 
 void Shader::setMat4(const std::string &name, glm::mat4 trans) const {
-    glUniformMatrix4fv(glGetUniformLocation(ID, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(trans));
+}
+
+void Shader::setVec3(const std::string &name, float v1, float v2, float v3) const {
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), v1, v2, v3);
 }

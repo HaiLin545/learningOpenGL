@@ -11,5 +11,4 @@ set(MAIN ${MAIN_ENTRY}.cpp)
 
 add_executable(${PROJECT_NAME} ${MAIN} ${HEADS} ${DEPS} )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw3)
